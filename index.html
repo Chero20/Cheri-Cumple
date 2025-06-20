@@ -12,7 +12,7 @@
     .opciones-test button { display:block; width:100%; margin:10px 0; visibility:hidden; }
     .sopa { font-family:monospace; font-size:20px; background:#fef9e7; padding:10px; border-radius:10px; display:none; margin:20px 0; white-space:pre; }
     img { max-width:100%; border-radius:10px; margin-top:10px; display:block; margin-left:auto; margin-right:auto; }
-    iframe { max-width:100%; margin-top:10px; display:none; }
+    iframe { max-width:100%; margin-top:10px; display:none; border:none; }
     .tablero { display:grid; grid-template-columns:repeat(3,100px); gap:5px; justify-content:center; margin-top:20px; }
     .celda { width:100px; height:100px; background:#fff3c4; display:flex; align-items:center; justify-content:center; cursor:pointer; border-radius:10px; }
     .celda img { width:60%; display:block; }
@@ -72,7 +72,7 @@ N O C H E R I N A R
 D S H E R I O F E W
 X M C L A S S I C Q</pre>
     <input type="text" id="respuestaSopa" style="display:none;">
-    <img id="love-img" src="img/loveN.png" alt="Love" />
+    <img id="love-img" src="img/loveN.jpeg" alt="Love" />
     <button id="btn-sopa">Comprobar</button>
     <div id="resultado2"></div>
   </section>
@@ -81,7 +81,7 @@ X M C L A S S I C Q</pre>
     <p id="texto-prueba3"></p>
     <button id="btn-avanzar-prueba3">Ir a la PRUEBA 3</button>
     <button id="btn-rendirse">Rendirse</button>
-    <img id="lab-img" src="img/lab.png" alt="Lab" />
+    <img id="lab-img" src="img/lab.jpeg" alt="Lab" />
   </section>
   <!-- Rendicion -->
   <section id="rendicion" class="pantalla">
@@ -158,7 +158,7 @@ X M C L A S S I C Q</pre>
           } else {
             mostrarSeccion('resultado1-incorrecto');
             escribirTextoProgresivo(
-              "nooooo que hases ya no me amas :(((",
+              "nooooo que hases ya no me amas :((",
               'texto-1i',30,()=>{
                 const video=document.getElementById('video-incorrecta'); video.style.display='block'; video.play();
                 document.getElementById('btn-reintentar').style.display='inline-block';
