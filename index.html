@@ -12,7 +12,7 @@
     .opciones-test button { display:block; width:100%; margin:10px 0; visibility:hidden; }
     .sopa { font-family:monospace; font-size:20px; background:#fef9e7; padding:10px; border-radius:10px; display:none; margin:20px 0; white-space:pre; }
     img { max-width:100%; border-radius:10px; margin-top:10px; display:block; margin-left:auto; margin-right:auto; }
-    video { max-width:100%; margin-top:10px; display:none; }
+    iframe { max-width:100%; margin-top:10px; display:none; }
     .tablero { display:grid; grid-template-columns:repeat(3,100px); gap:5px; justify-content:center; margin-top:20px; }
     .celda { width:100px; height:100px; background:#fff3c4; display:flex; align-items:center; justify-content:center; cursor:pointer; border-radius:10px; }
     .celda img { width:60%; display:block; }
@@ -103,7 +103,7 @@ X M C L A S S I C Q</pre>
   <section id="final" class="pantalla">
     <p id="texto-final"></p>
     <img id="cofre" src="img/cofre cerrado.png" alt="Cofre del tesoro" />
-    <video id="video-sorpresa" src="video/Cheri cumple.mp4" controls style="display:none;"></video>
+    <iframe id="iframe-sorpresa" width="100%" height="315" src="https://www.youtube.com/embed/vXl8nd0yN2I" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="display:none;"></iframe>
   </section>
   <script>
     let intentos=0, turno='jugador', tablero=[];
@@ -250,7 +250,7 @@ X M C L A S S I C Q</pre>
       };
       document.getElementById('cofre').onclick=()=>{
         const cofre=document.getElementById('cofre'); cofre.src='img/cofre abierto.png';
-        const video=document.getElementById('video-sorpresa'); video.style.display='block'; video.play();
+        const iframe=document.getElementById('iframe-sorpresa'); iframe.style.display='block';
       };
     };
   </script>
