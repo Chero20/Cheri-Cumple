@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aventura Cherosa</title>
+  <style>
+    body { font-family:'Segoe UI',sans-serif; background:#fffbea; margin:0; padding:20px; color:#333; text-align:center; }
+    .pantalla { display:none; max-width:600px; margin:0 auto; }
+    button { background:#f1c40f; color:#222; border:none; padding:12px 20px; margin-top:15px; border-radius:10px; font-size:16px; cursor:pointer; transition:background 0.3s; display:none; }
+    button:hover { background:#d4ac0d; }
+    .opciones-test button { display:block; width:100%; margin:10px 0; visibility:hidden; }
+    .sopa { font-family:monospace; font-size:20px; background:#fef9e7; padding:10px; border-radius:10px; display:none; margin:20px 0; white-space:pre; }
+    img { max-width:100%; border-radius:10px; margin-top:10px; display:block; margin-left:auto; margin-right:auto; }
+    video { max-width:100%; margin-top:10px; display:none; }
+    .tablero { display:grid; grid-template-columns:repeat(3,100px); gap:5px; justify-content:center; margin-top:20px; }
+    .celda { width:100px; height:100px; background:#fff3c4; display:flex; align-items:center; justify-content:center; cursor:pointer; border-radius:10px; }
+    .celda img { width:60%; display:block; }
+    h2 { color:#d35400; margin-top:30px; display:none; }
+    .btn-reintentar-juego { background:#e74c3c; color:#fff; }
+    #cofre { cursor:pointer; display:none; max-width:200px; margin:20px auto; }
+    #love-img { display:none; max-width:100px; margin:10px auto; }
+    #lab-img { display:none; max-width:100%; margin:10px auto; }
+  </style>
+</head>
+<body>
+  <!-- Inicio -->
+  <section id="pantalla-inicio" class="pantalla">
+    <p id="bienvenida"></p>
+    <button id="btn-inicio">Empezar</button>
+  </section>
+  <!-- Instrucciones -->
+  <section id="instrucciones" class="pantalla">
+    <p id="texto-instrucciones"></p>
+    <button id="btn-instrucciones">Ir a la PRUEBA 1</button>
+  </section>
+  <!-- Prueba 1 -->
+  <section id="prueba1" class="pantalla">
+    <h2 id="titulo-prueba1">Prueba 1</h2>
+    <p id="pregunta1"></p>
+    <div class="opciones-test">
+      <button id="pr1-op1">Taco Bell</button>
+      <button id="pr1-op2">Ginos</button>
+      <button id="pr1-op3">Tierra Burrito</button>
+      <button id="pr1-op4">McDonald's</button>
+    </div>
+  </section>
+  <!-- Resultado Prueba1 Correcto -->
+  <section id="resultado1-correcto" class="pantalla">
+    <p id="texto-1c"></p>
+    <img id="img-burrito" src="img/burrito.png" alt="Cena Burrito" style="display:none;">
+    <button id="btn-prueba2">Ir a la PRUEBA 2</button>
+  </section>
+  <!-- Resultado Prueba1 Incorrecto -->
+  <section id="resultado1-incorrecto" class="pantalla">
+    <p id="texto-1i"></p>
+    <video id="video-incorrecta" src="img/incorrecta.mp4" controls></video>
+    <button id="btn-reintentar">Volver a intentar</button>
+  </section>
+  <!-- Prueba 2 -->
+  <section id="prueba2" class="pantalla">
+    <h2 id="titulo-prueba2">Prueba 2</h2>
+    <p id="texto-prueba2"></p>
+    <pre id="sopa" class="sopa">Z Q L C H E R I O P
+U I D M B T G H A W
+N P Q R A C H E T T
+L A M O R C H E S E
+C H R S C H E R I L
+Y W E H B D C A V O
+A S I T I N U O L A
+N O C H E R I N A R
+D S H E R I O F E W
+X M C L A S S I C Q</pre>
+    <input type="text" id="respuestaSopa" style="display:none;">
+    <img id="love-img" src="img/loveN.jpeg" alt="Love" />
+    <button id="btn-sopa">Comprobar</button>
+    <div id="resultado2"></div>
+  </section>
+  <!-- Intro Prueba 3 -->
+  <section id="intro-prueba3" class="pantalla">
+    <p id="texto-prueba3"></p>
+    <button id="btn-avanzar-prueba3">Ir a la PRUEBA 3</button>
+    <button id="btn-rendirse">Rendirse</button>
+    <img id="lab-img" src="img/lab.jpeg" alt="Lab" />
+  </section>
+  <!-- Rendicion -->
+  <section id="rendicion" class="pantalla">
+    <p id="texto-rendicion"></p>
+    <button id="btn-rendicion2">Continuar</button>
+  </section>
+  <!-- Tres en Chera -->
+  <section id="prueba3" class="pantalla">
+    <h2 id="titulo-prueba3">Tres en Chera</h2>
+    <p id="texto-eleccion-turno">¿Quién empieza?</p>
+    <button id="btn-turno-jugador">Tú (Cheri)</button>
+    <button id="btn-turno-pablo">Pablito</button>
+    <div id="tablero" class="tablero"></div>
+    <p id="mensajeJuego"></p>
+    <button id="btn-reintentar-juego" class="btn-reintentar-juego" style="display:none;">Volver a intentar</button>
+    <button id="btn-avanzar-final" style="display:none;">Avanzar</button>
+  </section>
+  <!-- Pantalla Final -->
+  <section id="final" class="pantalla">
+    <p id="texto-final"></p>
+    <img id="cofre" src="img/cofre cerrado.png" alt="Cofre del tesoro" />
+    <video id="video-sorpresa" src="video/Cheri cumple.mp4" controls style="display:none;"></video>
+  </section>
+  <script>
+    let intentos=0, turno='jugador', tablero=[];
+    const imgs={jugador:'img/ana.JPEG',pablo:'img/pablo.JPEG'};
+    function mostrarSeccion(id){
+      document.querySelectorAll('.pantalla').forEach(s=>s.style.display='none');
+      document.querySelectorAll('h2').forEach(h=>h.style.display='none');
+      document.querySelectorAll('button').forEach(b=>b.style.display='none');
+      document.getElementById(id).style.display='block';
+    }
+    function escribirTextoProgresivo(txt,id,vel=30,cb){
+      const el=document.getElementById(id); el.innerHTML=''; let i=0;
+      function w(){ if(i<txt.length){ el.innerHTML+=txt.charAt(i++); setTimeout(w,vel);} else if(cb) cb(); }
+      w();
+    }
+    window.onload=()=>{
+      // Inicio
+      mostrarSeccion('pantalla-inicio');
+      escribirTextoProgresivo(
+        "Hola pequeña Cheri, tengo una pequeña aventura para ti… 💖",
+        'bienvenida',50,()=>document.getElementById('btn-inicio').style.display='inline-block'
+      );
+      document.getElementById('btn-inicio').onclick=()=>{
+        mostrarSeccion('instrucciones');
+        escribirTextoProgresivo(
+          "Bienvenida a la búsqueda del tesoro cheroso, tienes que someterte a unas preguntas mochicas sobre tu relación con el artista mundial el pablito baby. Para que puedas desbloquear el tesoro final tienes que superar esas preguntas y algunas pruebitas jejeje",
+          'texto-instrucciones',30,()=>document.getElementById('btn-instrucciones').style.display='inline-block'
+        );
+      };
+      // Prueba1
+      document.getElementById('btn-instrucciones').onclick=()=>{
+        mostrarSeccion('prueba1'); document.getElementById('titulo-prueba1').style.display='inline-block';
+        escribirTextoProgresivo("Prueba 1","titulo-prueba1",30,()=>{
+          escribirTextoProgresivo("¿Dónde fue nuestra rica cena el primer día que nos conocimos?","pregunta1",30,()=>{
+            ['pr1-op1','pr1-op2','pr1-op3','pr1-op4'].forEach((id,i)=>{
+              setTimeout(()=>{const btn=document.getElementById(id); btn.style.visibility='visible'; btn.style.display='block';}, i*300);
+            });
+          });
+        });
+      };
+      ['pr1-op1','pr1-op2','pr1-op3','pr1-op4'].forEach((id,idx)=>{
+        document.getElementById(id).onclick=()=>{
+          if(idx===2){
+            mostrarSeccion('resultado1-correcto');
+            escribirTextoProgresivo(
+              "muy biennn, ahí me di cuenta de todo lo que te cabía en la boca woww, vicioser y gorder (me enamoré lo admito)",
+              'texto-1c',30,()=>{
+                const img=document.getElementById('img-burrito'); img.src='img/burrito.png'; img.style.display='block';
+                document.getElementById('btn-prueba2').style.display='inline-block';
+              }
+            );
+          } else {
+            mostrarSeccion('resultado1-incorrecto');
+            escribirTextoProgresivo(
+              "nooooo que hases ya no me amas :(((",
+              'texto-1i',30,()=>{
+                const video=document.getElementById('video-incorrecta'); video.style.display='block'; video.play();
+                document.getElementById('btn-reintentar').style.display='inline-block';
+              }
+            );
+          }
+        };
+      });
+      document.getElementById('btn-reintentar').onclick=()=>{
+        mostrarSeccion('prueba1'); document.getElementById('texto-1i').innerHTML=''; document.getElementById('titulo-prueba1').style.display='inline-block';
+        const video=document.getElementById('video-incorrecta'); video.pause(); video.currentTime=0; video.style.display='none';
+        ['pr1-op1','pr1-op2','pr1-op3','pr1-op4'].forEach(el=>{const btn=document.getElementById(el); btn.style.visibility='hidden'; btn.style.display='none';});
+        escribirTextoProgresivo(
+          "Prueba 1","titulo-prueba1",30,()=>{
+            escribirTextoProgresivo("¿Dónde fue nuestra rica cena el primer día que nos conocimos?","pregunta1",30,()=>{
+              ['pr1-op1','pr1-op2','pr1-op3','pr1-op4'].forEach((id,i)=>{
+                setTimeout(()=>{const btn=document.getElementById(id); btn.style.visibility='visible'; btn.style.display='block';}, i*300);
+              });
+            });
+          }
+        );
+      };
+      // Prueba2
+      document.getElementById('btn-prueba2').onclick=()=>{
+        mostrarSeccion('prueba2'); document.getElementById('titulo-prueba2').style.display='inline-block';
+        escribirTextoProgresivo("Prueba 2","titulo-prueba2",30,()=>{
+          escribirTextoProgresivo("Encuentra la palabra oculta","texto-prueba2",30,()=>{
+            document.getElementById('sopa').style.display='inline-block'; setTimeout(()=>{document.getElementById('respuestaSopa').style.display='inline-block'; document.getElementById('love-img').style.display='none'; document.getElementById('btn-sopa').style.display='inline-block';},500);
+          });
+        });
+      };
+      document.getElementById('btn-sopa').onclick=()=>{
+        const v=document.getElementById('respuestaSopa').value.trim().toLowerCase(); document.getElementById('resultado2').innerHTML='';
+        const love=document.getElementById('love-img'); love.style.display='none';
+        if(v==='cheri'){
+          escribirTextoProgresivo("Muy bienn somos cheri cherosos, cheritowners y muy felises :))))",'resultado2',30,()=>{
+            love.style.display='block';
+            const b=document.createElement('button'); b.innerText='Avanzar'; b.style.display='inline-block';
+            b.style.marginTop='10px'; b.onclick=mostrarIntroPrueba3;
+            document.getElementById('resultado2').appendChild(love);
+            document.getElementById('resultado2').appendChild(b);
+          });
+        } else {
+          escribirTextoProgresivo("Nooooo loquer, revisalo de nuevo",'resultado2',30);
+        }
+      };
+      // Intro Prueba3
+      function mostrarIntroPrueba3(){
+        mostrarSeccion('intro-prueba3');
+        const lab=document.getElementById('lab-img'); lab.style.display='none';
+        escribirTextoProgresivo("Muy bien muy bien, te estás acercando a tu premio de cumpleaños pero ahora te espera una prueba que pondrá a prueba tu nivel como chera ganadora, puedes decidir rendirte si quieres pero la chera creo que nunca se rendiría…","texto-prueba3",30,()=>{
+          document.getElementById('btn-avanzar-prueba3').style.display='inline-block'; document.getElementById('btn-rendirse').style.display='inline-block';
+        });
+      }
+      document.getElementById('btn-rendirse').onclick=()=>{
+        mostrarSeccion('intro-prueba3');
+        const lab=document.getElementById('lab-img');
+        escribirTextoProgresivo("noooo seguro te confundiste, eres la mujer más luchadora y jamás te rendirás","texto-prueba3",30,()=>{
+          lab.style.display='block';
+          // solo mostrar avanzar
+          document.getElementById('btn-avanzar-prueba3').style.display='inline-block';
+          document.getElementById('btn-rendirse').style.display='none';
+        });
+      };
+      document.getElementById('btn-avanzar-prueba3').onclick=mostrarPrueba3;
+      // Prueba3
+      function mostrarPrueba3(){
+        mostrarSeccion('prueba3'); document.getElementById('titulo-prueba3').style.display='inline-block'; document.getElementById('texto-eleccion-turno').style.display='block';
+        document.getElementById('btn-turno-jugador').style.display='inline-block'; document.getElementById('btn-turno-pablo').style.display='inline-block';
+        document.getElementById('btn-reintentar-juego').style.display='none'; document.getElementById('btn-avanzar-final').style.display='none';
+      }
+      function iniciarJuego(emp){
+        intentos++; turno=emp; tablero=Array(9).fill(null); document.getElementById('mensajeJuego').innerText='';
+        document.getElementById('btn-turno-jugador').style.display='none'; document.getElementById('btn-turno-pablo').style.display='none';
+        renderTablero(); if(turno==='pablo') setTimeout(ia,500);
+      }
+      function renderTablero(){ const cont=document.getElementById('tablero'); cont.innerHTML=''; tablero.forEach((v,i)=>{ const c=document.createElement('div'); c.className='celda'; c.onclick=()=>jugar(i); if(v){ const img=new Image(); img.src=imgs[v]; img.style.display='block'; c.appendChild(img);} cont.appendChild(c); }); }
+      function jugar(i){ if(!tablero[i]&&turno==='jugador'){ tablero[i]='jugador'; turno='pablo'; renderTablero(); if(!verif()) setTimeout(ia,600);} }
+      function ia(){ let dpts=tablero.map((v,i)=>v===null?i:null).filter(x=>x!==null); let dif=intentos===1?'dificil':intentos===2?'media':'facil'; let sel; if(dif==='facil') sel=dpts[Math.floor(Math.random()*dpts.length)]; else if(dif==='media') sel=dpts[0]; else sel=dpts.reverse()[0]; tablero[sel]='pablo'; turno='jugador'; renderTablero(); verif(); }
+      function verif(){ for(const line of[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]]){ if(tablero[line[0]]&&tablero[line[0]]===tablero[line[1]]&&tablero[line[1]]===tablero[line[2]]){ const ganador=tablero[line[0]]==='jugador'?'¡Ganaste chera legendaria!':'Ganó el pablito :( ¡Intenta otra vez!'; document.getElementById('mensajeJuego').innerText=ganador; document.getElementById('btn-reintentar-juego').style.display='inline-block'; if(tablero[line[0]]==='jugador'){ document.getElementById('btn-avanzar-final').style.display='inline-block'; } return true;} } if(!tablero.includes(null)){ document.getElementById('mensajeJuego').innerText='Empateeeeeeee'; document.getElementById('btn-reintentar-juego').style.display='inline-block'; return true;} return false; }
+      document.getElementById('btn-turno-jugador').onclick=()=>iniciarJuego('jugador');
+      document.getElementById('btn-turno-pablo').onclick=()=>iniciarJuego('pablo');
+      document.getElementById('btn-reintentar-juego').onclick=()=>{ mostrarSeccion('prueba3'); document.getElementById('mensajeJuego').innerText=''; document.getElementById('tablero').innerHTML=''; document.getElementById('texto-eleccion-turno').style.display='block'; document.getElementById('btn-turno-jugador').style.display='inline-block'; document.getElementById('btn-turno-pablo').style.display='inline-block'; document.getElementById('btn-reintentar-juego').style.display='none'; document.getElementById('btn-avanzar-final').style.display='none'; };
+      document.getElementById('btn-avanzar-final').onclick=()=>{
+        mostrarSeccion('final');
+        escribirTextoProgresivo(
+          "Lo has hecho muy bien mi cheri linda, ahora lo único que queda esque descubras cual es tu sorpresa. Aquí abajo aparecerá el cofre del tesoro mochica, si estas lista para ver tu sorpresa pincha sobre él",
+          'texto-final',30,()=>{ document.getElementById('cofre').style.display='block'; }
+        );
+      };
+      document.getElementById('cofre').onclick=()=>{
+        const cofre=document.getElementById('cofre'); cofre.src='img/cofre abierto.png';
+        const video=document.getElementById('video-sorpresa'); video.style.display='block'; video.play();
+      };
+    };
+  </script>
+</body>
+</html>
