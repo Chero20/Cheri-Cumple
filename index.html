@@ -9,6 +9,7 @@
     .pantalla { display:none; max-width:600px; margin:0 auto; }
     button { background:#f1c40f; color:#222; border:none; padding:12px 20px; margin-top:15px; border-radius:10px; font-size:16px; cursor:pointer; transition:background 0.3s; display:none; }
     button:hover { background:#d4ac0d; }
+    .btn-reintentar-juego { background:#e74c3c; color:#fff; }
     .opciones-test button { display:block; width:100%; margin:10px 0; visibility:hidden; }
     .sopa { font-family:monospace; font-size:20px; background:#fef9e7; padding:10px; border-radius:10px; display:none; margin:20px 0; white-space:pre; }
     img { max-width:100%; border-radius:10px; margin-top:10px; display:block; margin-left:auto; margin-right:auto; }
@@ -17,7 +18,6 @@
     .celda { width:100px; height:100px; background:#fff3c4; display:flex; align-items:center; justify-content:center; cursor:pointer; border-radius:10px; }
     .celda img { width:60%; display:block; }
     h2 { color:#d35400; margin-top:30px; display:none; }
-    .btn-reintentar-juego { background:#e74c3c; color:#fff; }
     #cofre { cursor:pointer; display:none; max-width:200px; margin:20px auto; }
     #love-img { display:none; max-width:100px; margin:10px auto; }
     #lab-img { display:none; max-width:100%; margin:10px auto; }
@@ -54,7 +54,7 @@
   <!-- Resultado Prueba1 Incorrecto -->
   <section id="resultado1-incorrecto" class="pantalla">
     <p id="texto-1i"></p>
-    <video id="video-incorrecta" src="img/incorrecta.mp4" controls></video>
+    <video id="video-incorrecta" src="img/incorrecta.mp4" controls style="display:none;"></video>
     <button id="btn-reintentar">Volver a intentar</button>
   </section>
   <!-- Prueba 2 -->
@@ -103,7 +103,7 @@ X M C L A S S I C Q</pre>
   <section id="final" class="pantalla">
     <p id="texto-final"></p>
     <img id="cofre" src="img/cofre cerrado.png" alt="Cofre del tesoro" />
-    <iframe id="iframe-sorpresa" width="100%" height="315" src="https://www.youtube.com/embed/vXl8nd0yN2I" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="display:none;"></iframe>
+    <iframe id="iframe-sorpresa" width="100%" height="315" src="https://www.youtube.com/embed/vXl8nd0yN2I" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="display:none;"></iframe>
   </section>
   <script>
     let intentos=0, turno='jugador', tablero=[];
@@ -138,45 +138,44 @@ X M C L A S S I C Q</pre>
         mostrarSeccion('prueba1'); document.getElementById('titulo-prueba1').style.display='inline-block';
         escribirTextoProgresivo("Prueba 1","titulo-prueba1",30,()=>{
           escribirTextoProgresivo("¿Dónde fue nuestra rica cena el primer día que nos conocimos?","pregunta1",30,()=>{
-n            ['pr1-op1','pr1-op2','pr1-op3','pr1-op4'].forEach((id,i)=>{
-n              setTimeout(()=>{const btn=document.getElementById(id); btn.style.visibility='visible'; btn.style.display='block';}, i*300);
-n            });
-n          });
-n        });
-n      };
-n      ['pr1-op1','pr1-op2','pr1-op3','pr1-op4'].forEach((id,idx)=>{
-n        document.getElementById(id).onclick=()=>{
-n          if(idx===2){
-n            mostrarSeccion('resultado1-correcto');
-n            escribirTextoProgresivo(
-n              "muy biennn, ahí me di cuenta de todo lo que te cabía en la boca woww, vicioser y gorder (me enamoré lo admito)",
-n              'texto-1c',30,()=>{
-n                const img=document.getElementById('img-burrito'); img.src='img/burrito.png'; img.style.display='block';
-n                document.getElementById('btn-prueba2').style.display='inline-block';
-n              }
-n            );
-n          } else {
-n            mostrarSeccion('resultado1-incorrecto');
-n            escribirTextoProgresivo(
-n              "nooooo que hases ya no me amas :((
-n              'texto-1i',30,()=>{
-n                const video=document.getElementById('video-incorrecta'); video.style.display='block'; video.play();
-n                document.getElementById('btn-reintentar').style.display='inline-block';
-n              }
-n            );
-n          }
-n        };
-n      });
-n      document.getElementById('btn-reintentar').onclick=()=>{
+            ['pr1-op1','pr1-op2','pr1-op3','pr1-op4'].forEach((id,i)=>{
+              setTimeout(()=>{const btn=document.getElementById(id); btn.style.visibility='visible'; btn.style.display='block';}, i*300);
+            });
+          });
+        });
+      };
+      ['pr1-op1','pr1-op2','pr1-op3','pr1-op4'].forEach((id,idx)=>{
+        document.getElementById(id).onclick=()=>{
+          if(idx===2){
+            mostrarSeccion('resultado1-correcto');
+            escribirTextoProgresivo(
+              "muy biennn, ahí me di cuenta de todo lo que te cabía en la boca woww, vicioser y gorder (me enamoré lo admito)",
+              'texto-1c',30,()=>{
+                const img=document.getElementById('img-burrito'); img.src='img/burrito.png'; img.style.display='block';
+                document.getElementById('btn-prueba2').style.display='inline-block';
+              }
+            );
+          } else {
+            mostrarSeccion('resultado1-incorrecto');
+            escribirTextoProgresivo(
+              "nooooo que hases ya no me amas :((", 'texto-1i',30,()=>{
+                const video=document.getElementById('video-incorrecta'); video.style.display='block'; video.play();
+                document.getElementById('btn-reintentar').style.display='inline-block';
+              }
+            );
+          }
+        };
+      });
+      document.getElementById('btn-reintentar').onclick=()=>{
         mostrarSeccion('prueba1'); document.getElementById('texto-1i').innerHTML=''; document.getElementById('titulo-prueba1').style.display='inline-block';
         const video=document.getElementById('video-incorrecta'); video.pause(); video.currentTime=0; video.style.display='none';
         ['pr1-op1','pr1-op2','pr1-op3','pr1-op4'].forEach(el=>{const btn=document.getElementById(el); btn.style.visibility='hidden'; btn.style.display='none';});
         escribirTextoProgresivo(
           "Prueba 1","titulo-prueba1",30,()=>{
             escribirTextoProgresivo("¿Dónde fue nuestra rica cena el primer día que nos conocimos?","pregunta1",30,()=>{
-n              ['pr1-op1','pr1-op2','pr1-op3','pr1-op4'].forEach((id,i)=>{
-n                setTimeout(()=>{const btn=document.getElementById(id); btn.style.visibility='visible'; btn.style.display='block';}, i*300);
-n              });
+              ['pr1-op1','pr1-op2','pr1-op3','pr1-op4'].forEach((id,i)=>{
+                setTimeout(()=>{const btn=document.getElementById(id); btn.style.visibility='visible'; btn.style.display='block';}, i*300);
+              });
             });
           }
         );
@@ -186,8 +185,8 @@ n              });
         mostrarSeccion('prueba2'); document.getElementById('titulo-prueba2').style.display='inline-block';
         escribirTextoProgresivo("Prueba 2","titulo-prueba2",30,()=>{
           escribirTextoProgresivo("Encuentra la palabra oculta","texto-prueba2",30,()=>{
-n            document.getElementById('sopa').style.display='inline-block'; setTimeout(()=>{document.getElementById('respuestaSopa').style.display='inline-block'; document.getElementById('love-img').style.display='none'; document.getElementById('btn-sopa').style.display='inline-block';},500);
-n          });
+            document.getElementById('sopa').style.display='inline-block'; setTimeout(()=>{document.getElementById('respuestaSopa').style.display='inline-block'; document.getElementById('love-img').style.display='none'; document.getElementById('btn-sopa').style.display='inline-block';},500);
+          });
         });
       };
       document.getElementById('btn-sopa').onclick=()=>{
@@ -196,10 +195,7 @@ n          });
         if(v==='cheri'){
           escribirTextoProgresivo("Muy bienn somos cheri cherosos, cheritowners y muy felises :))))",'resultado2',30,()=>{
             love.style.display='block';
-            const b=document.createElement('button'); b.innerText='Avanzar'; b.style.display='inline-block';
-            b.style.marginTop='10px'; b.onclick=mostrarIntroPrueba3;
-            document.getElementById('resultado2').appendChild(love);
-            document.getElementById('resultado2').appendChild(b);
+            const b=document.createElement('button'); b.innerText='Avanzar'; b.style.display='inline-block'; b.onclick=mostrarIntroPrueba3; document.getElementById('resultado2').appendChild(love); document.getElementById('resultado2').appendChild(b);
           });
         } else {
           escribirTextoProgresivo("Nooooo loquer, revisalo de nuevo",'resultado2',30);
@@ -207,19 +203,15 @@ n          });
       };
       // Intro Prueba3
       function mostrarIntroPrueba3(){
-        mostrarSeccion('intro-prueba3');
-        const lab=document.getElementById('lab-img'); lab.style.display='none';
+        mostrarSeccion('intro-prueba3'); document.getElementById('lab-img').style.display='none';
         escribirTextoProgresivo("Muy bien muy bien, te estás acercando a tu premio de cumpleaños pero ahora te espera una prueba que pondrá a prueba tu nivel como chera ganadora, puedes decidir rendirte si quieres pero la chera creo que nunca se rendiría…","texto-prueba3",30,()=>{
           document.getElementById('btn-avanzar-prueba3').style.display='inline-block'; document.getElementById('btn-rendirse').style.display='inline-block';
         });
       }
       document.getElementById('btn-rendirse').onclick=()=>{
-        mostrarSeccion('intro-prueba3');
-        const lab=document.getElementById('lab-img');
+        mostrarSeccion('intro-prueba3'); document.getElementById('lab-img').style.display='none';
         escribirTextoProgresivo("noooo seguro te confundiste, eres la mujer más luchadora y jamás te rendirás","texto-prueba3",30,()=>{
-          lab.style.display='block';
-          document.getElementById('btn-avanzar-prueba3').style.display='inline-block';
-          document.getElementById('btn-rendirse').style.display='none';
+          document.getElementById('lab-img').style.display='block'; document.getElementById('btn-avanzar-prueba3').style.display='inline-block'; document.getElementById('btn-rendirse').style.display='none';
         });
       };
       document.getElementById('btn-avanzar-prueba3').onclick=mostrarPrueba3;
@@ -231,8 +223,7 @@ n          });
       }
       function iniciarJuego(emp){
         intentos++; turno=emp; tablero=Array(9).fill(null); document.getElementById('mensajeJuego').innerText='';
-        document.getElementById('btn-turno-jugador').style.display='none'; document.getElementById('btn-turno-pablo').style.display='none';
-        renderTablero(); if(turno==='pablo') setTimeout(ia,500);
+        document.getElementById('btn-turno-jugador').style.display='none'; document.getElementById('btn-turno-pablo').style.display='none'; renderTablero(); if(turno==='pablo') setTimeout(ia,500);
       }
       function renderTablero(){ const cont=document.getElementById('tablero'); cont.innerHTML=''; tablero.forEach((v,i)=>{ const c=document.createElement('div'); c.className='celda'; c.onclick=()=>jugar(i); if(v){ const img=new Image(); img.src=imgs[v]; img.style.display='block'; c.appendChild(img);} cont.appendChild(c); }); }
       function jugar(i){ if(!tablero[i]&&turno==='jugador'){ tablero[i]='jugador'; turno='pablo'; renderTablero(); if(!verif()) setTimeout(ia,600);} }
@@ -242,8 +233,7 @@ n          });
       document.getElementById('btn-turno-pablo').onclick=()=>iniciarJuego('pablo');
       document.getElementById('btn-reintentar-juego').onclick=()=>{ mostrarSeccion('prueba3'); document.getElementById('mensajeJuego').innerText=''; document.getElementById('tablero').innerHTML=''; document.getElementById('texto-eleccion-turno').style.display='block'; document.getElementById('btn-turno-jugador').style.display='inline-block'; document.getElementById('btn-turno-pablo').style.display='inline-block'; document.getElementById('btn-reintentar-juego').style.display='none'; document.getElementById('btn-avanzar-final').style.display='none'; };
       document.getElementById('btn-avanzar-final').onclick=()=>{
-        mostrarSeccion('final');
-        escribirTextoProgresivo(
+        mostrarSeccion('final'); escribirTextoProgresivo(
           "Lo has hecho muy bien mi cheri linda, ahora lo único que queda esque descubras cual es tu sorpresa. Aquí abajo aparecerá el cofre del tesoro mochica, si estas lista para ver tu sorpresa pincha sobre él",
           'texto-final',30,()=>{ document.getElementById('cofre').style.display='block'; }
         );
