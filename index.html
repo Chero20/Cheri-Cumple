@@ -72,7 +72,7 @@ N O C H E R I N A R
 D S H E R I O F E W
 X M C L A S S I C Q</pre>
     <input type="text" id="respuestaSopa" style="display:none;">
-    <img id="love-img" src="img/loveN.jpeg" alt="Love" />
+    <img id="love-img" src="img/loveN.png" alt="Love" />
     <button id="btn-sopa">Comprobar</button>
     <div id="resultado2"></div>
   </section>
@@ -81,7 +81,7 @@ X M C L A S S I C Q</pre>
     <p id="texto-prueba3"></p>
     <button id="btn-avanzar-prueba3">Ir a la PRUEBA 3</button>
     <button id="btn-rendirse">Rendirse</button>
-    <img id="lab-img" src="img/lab.jpeg" alt="Lab" />
+    <img id="lab-img" src="img/lab.png" alt="Lab" />
   </section>
   <!-- Rendicion -->
   <section id="rendicion" class="pantalla">
@@ -218,7 +218,6 @@ X M C L A S S I C Q</pre>
         const lab=document.getElementById('lab-img');
         escribirTextoProgresivo("noooo seguro te confundiste, eres la mujer más luchadora y jamás te rendirás","texto-prueba3",30,()=>{
           lab.style.display='block';
-          // solo mostrar avanzar
           document.getElementById('btn-avanzar-prueba3').style.display='inline-block';
           document.getElementById('btn-rendirse').style.display='none';
         });
